@@ -5,7 +5,7 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Mettez à jour votre profile.') }}
+            {{ __('Mets à jour ton profile.') }}
         </p>
     </header>
 
