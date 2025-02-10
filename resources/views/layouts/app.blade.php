@@ -20,7 +20,7 @@
     <div class="flex min-h-screen bg-gray-100">
         @include('layouts.navigation')
         <!-- Page Content -->
-        <main class="w-[calc(100%-72px)] lg:w-[calc(100%-244px)]">
+        <main class="w-full md:w-[calc(100%-72px)] lg:w-[calc(100%-244px)] mt-[50px] md:mt-0">
             {{ $slot }}
         </main>
     </div>

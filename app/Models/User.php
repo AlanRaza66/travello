@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -46,5 +47,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Summary of following
+     * Get all users who i follow
+     * @return BelongsToMany<User, User>
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follower_user', 'follower_id', 'user_id');
+    }
+
+    /**
+     * Summary of following
+     * Get all users who follow me
+     * @return BelongsToMany<User, User>
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follower_user', 'user_id', 'follower_id');
     }
 }
