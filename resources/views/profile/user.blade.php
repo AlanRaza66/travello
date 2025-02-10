@@ -11,10 +11,19 @@
             <div>
                 <div class="flex items-center gap-2">
                     <h1 class="hidden text-lg font-bold lg:inline">{{ $user->name }}</h1>
-                    <a href="{{ route('profile.edit') }}">
-                        <x-primary-button>Modifier le profil</x-primary-button>
-                    </a>
-                    <x-primary-button>Archives</x-primary-button>
+                    @if ($isFollowed)
+                        <form method="post" action="{{ route('profile.unfollow', ['user' => $user]) }}">
+                            @csrf
+                            @method('put')
+                            <x-secondary-button>Suivi(e)</x-secondary-button>
+                        </form>
+                    @else
+                        <form method="post" action="{{ route('profile.follow', ['user' => $user]) }}">
+                            @csrf
+                            @method('put')
+                            <x-primary-button>Suivre</x-primary-button>
+                        </form>
+                    @endif
                 </div>
                 <div class="flex items-center gap-2 mt-4">
                     <p><span class="font-bold">0</span> publication</p>

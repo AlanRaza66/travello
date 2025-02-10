@@ -70,8 +70,20 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function getUser(User $user): View
+    public function getUser(User $user, Request $request): View
     {
-        return view('profile.user', ['user' => $user]);
+        $isFollowing = $request->user()->isFollowing($user);
+        return view('profile.user', ['user' => $user, 'isFollowed' => $isFollowing]);
+    }
+
+    public function follow(User $user, Request $request): RedirectResponse {
+        $user->followers()->attach($request->user()->id);
+        $message = "Tu suis " . $user->name;
+        return Redirect::route('profile.user', ['user' => $user->slug])->with('success', $message);
+    }
+    public function unfollow(User $user, Request $request): RedirectResponse {
+        $user->followers()->detach($request->user()->id);
+        $message = "Tu ne suis plus" . $user->name;
+        return Redirect::route('profile.user', ['user' => $user->slug])->with('success', $message);
     }
 }
