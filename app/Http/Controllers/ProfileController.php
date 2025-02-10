@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,10 @@ class ProfileController extends Controller
      */
     public function index(Request $request): View
     {
+        $doYouKnow = User::all()->whereNotIn('id', [$request->user()->id])->shuffle()->take(limit: 3);
         return view('profile.index', [
             'user' => $request->user(),
+            'doYouKnow' => $doYouKnow
         ]);
     }
     /**
@@ -65,5 +68,10 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function getUser(User $user): View
+    {
+        return view('profile.user', ['user' => $user]);
     }
 }
