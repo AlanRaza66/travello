@@ -25,6 +25,8 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'bio' => ['string', 'min:0', 'max:255'],
+            'isPublic' => ['boolean']
         ];
     }
 }
