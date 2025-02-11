@@ -8,6 +8,11 @@
     <x-container>
         <div class="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
             <div class="max-w-xl">
+                @include('profile.partials.upload-user-image')
+            </div>
+        </div>
+        <div class="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
+            <div class="max-w-xl">
                 @include('profile.partials.update-profile-information-form')
             </div>
         </div>

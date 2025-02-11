@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UploadProfilePicture;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -76,14 +77,31 @@ class ProfileController extends Controller
         return view('profile.user', ['user' => $user, 'isFollowed' => $isFollowing]);
     }
 
-    public function follow(User $user, Request $request): RedirectResponse {
+    public function follow(User $user, Request $request): RedirectResponse
+    {
         $user->followers()->attach($request->user()->id);
         $message = "Tu suis " . $user->name;
         return Redirect::route('profile.user', ['user' => $user->slug])->with('success', $message);
     }
-    public function unfollow(User $user, Request $request): RedirectResponse {
+    public function unfollow(User $user, Request $request): RedirectResponse
+    {
         $user->followers()->detach($request->user()->id);
         $message = "Tu ne suis plus" . $user->name;
         return Redirect::route('profile.user', ['user' => $user->slug])->with('success', $message);
+    }
+
+    public function upload(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'picture' => 'required|image|mimes:jpeg,jpg,png,webp|max:1024|dimensions:min_width=100,min_height=100,max_width=3000,max_height=3000',
+        ]);
+
+        $fileName = time() . $request->user()->slug . '.' . $request->file('picture')->getClientOriginalExtension();
+        $request->file('picture')->move(public_path('uploads/pictures'), $fileName);
+
+        $request->user()->picture = "uploads/pictures/" . $fileName;
+        $request->user()->save();
+
+        return back()->with('success', 'Image importée avec succès.');
     }
 }

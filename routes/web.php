@@ -17,6 +17,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/edit', 'edit')->name('edit');
         Route::patch('/', 'update')->name('update');
+        Route::patch('/upload', 'upload')->name('picture.upload');
         Route::delete('/', 'destroy')->name('destroy');
         Route::get('/{user:slug}', [ProfileController::class, 'getUser'])->name('user');
         Route::put('/follow/{user:slug}', [ProfileController::class, 'follow'])->name('follow');

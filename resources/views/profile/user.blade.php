@@ -3,8 +3,14 @@
         {{-- Upper part of profile --}}
         <div class="flex flex-col justify-start gap-6 mx-4 lg:flex-row lg:items-center lg:justify-center">
             <div class="flex flex-wrap items-center justify-start gap-2">
-                <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] bg-teal-600">
-
+                <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] overflow-hidden">
+                    @if ($user->picture !== null)
+                        <img src={{ asset($user->picture) }} width="166" height="166"
+                            class="object-contain object-center w-full h-full" />
+                    @else
+                        <img src={{ asset('/avatar.jpg') }} width="166" height="166"
+                            class="object-contain object-center w-full h-full" />
+                    @endif
                 </div>
                 <h1 class="inline text-lg font-bold lg:hidden">{{ $user->name }}</h1>
             </div>
