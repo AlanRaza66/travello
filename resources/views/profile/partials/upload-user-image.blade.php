@@ -54,9 +54,13 @@
                     {{ __('Annuler') }}
                 </x-secondary-button>
 
-                <x-danger-button class="ms-3">
-                    {{ __('Supprimer') }}
-                </x-danger-button>
+                <form id="delete-form" action="{{ route('profile.picture.delete') }}" method="POST">
+                    @csrf
+                    @method('patch')
+                    <x-danger-button class="ms-3">
+                        {{ __('Supprimer') }}
+                    </x-danger-button>
+                </form>
             </div>
         </div>
     </x-modal>

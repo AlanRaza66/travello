@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -102,6 +103,22 @@ class ProfileController extends Controller
         $request->user()->picture = "uploads/pictures/" . $fileName;
         $request->user()->save();
 
-        return back()->with('success', 'Image importée avec succès.');
+        return back()->with('success', 'La photo a été importée avec succès.');
+    }
+
+    public function deletePicture(Request $request)
+    {
+        $user = $request->user();
+
+        $filePath = public_path($user->picture);
+        if (file_exists($filePath)) {
+            unlink($filePath);  // Supprime le fichier
+            $user->picture = null;
+            $user->save();
+
+            return redirect()->back()->with('success', 'Photo supprimée avec succès.');
+        }
+
+        return redirect()->back()->withErrors('Aucune photo à supprimer.');
     }
 }
