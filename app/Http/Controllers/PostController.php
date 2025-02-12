@@ -6,6 +6,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -34,8 +35,23 @@ class PostController extends Controller
         return Redirect::route('dashboard')->with('success', 'La publication a bien été effectuée');
     }
 
-    public function show(User $user, Post $post): View
+    public function show(User $user, Post $post, Request $request): View
     {
-        return view('posts.post', ['post' => $post]);
+        $isLiked = $request->user()->liked($post);
+        $likes = $post->likes()->count();
+        return view('posts.post', ['post' => $post, 'isLiked' => $isLiked, 'likes' => $likes]);
+    }
+
+    public function like(Post $post, Request $request, )
+    {
+        $request->user()->likes()->attach($post->id);
+
+        return back()->with('success', 'Tu as aimé cette publication.');
+    }
+    public function unlike(Post $post, Request $request, )
+    {
+        $request->user()->likes()->detach($post->id);
+
+        return back()->with('success', 'Tu n\'aimes plus cette publication.');
     }
 }

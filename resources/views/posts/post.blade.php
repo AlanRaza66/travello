@@ -19,11 +19,25 @@
                         <p class="whitespace-pre-wrap">{{ $post->description }}</p>
                     </div>
                 </div>
-                <div class="w-full p-2 ">
+                <div class="w-full gap-4 p-2">
                     <div class="flex gap-2">
-                        <div>
-                            <x-heroicon-o-heart class="w-6 h-6 text-black cursor-pointer" />
-                        </div>
+                        @if ($isLiked)
+                            <form method="post" action="{{ route('post.unlike', ['post' => $post]) }}">
+                                @csrf <button type="submit" class="flex items-center justify-start">
+                                    <x-heroicon-s-heart class="w-6 h-6 text-black cursor-pointer" />
+                                    <p class="ml-[2px]">{{ $likes }}</p>
+                                </button>
+                            </form>
+                        @else
+                            <form method="post" action="{{ route('post.like', ['post' => $post]) }}">
+                                @csrf
+                                <button type="submit" class="flex items-center justify-start">
+                                    <x-heroicon-o-heart class="w-6 h-6 text-black cursor-pointer" />
+                                    <p class="ml-[2px]">{{ $likes }}</p>
+                                </button>
+                            </form>
+                        @endif
+
                         <div>
                             <x-heroicon-o-chat-bubble-left class="w-6 h-6 text-black cursor-pointer" />
                         </div>
