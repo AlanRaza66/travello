@@ -8,4 +8,8 @@ class Post extends Model
 {
     //
     protected $fillable = ["description","picture","location","user_id"];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

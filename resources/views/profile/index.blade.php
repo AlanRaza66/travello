@@ -5,10 +5,10 @@
             <div class="flex flex-wrap items-center justify-start gap-2">
                 <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] overflow-hidden">
                     @if ($user->picture !== null)
-                        <img src={{ asset($user->picture) }} width="166" height="166"
+                        <img src={{ asset($user->picture) }} alt="{{ $user->name }}" width="166" height="166"
                             class="object-contain object-center w-full h-full" />
                     @else
-                        <img src={{ asset('/avatar.jpg') }} width="166" height="166"
+                        <img src={{ asset('/avatar.jpg') }} alt="Photo de profile vide" width="166" height="166"
                             class="object-contain object-center w-full h-full" />
                     @endif
                 </div>
@@ -45,11 +45,11 @@
                             class="flex flex-wrap items-center justify-center gap-4">
                             <div class="w-[55px] h-[55px] lg:h-[86px] lg:w-[86px] rounded-[50%] overflow-hidden">
                                 @if ($profile->picture !== null)
-                                    <img src={{ asset($profile->picture) }} width="166" height="166"
-                                        class="object-contain object-center w-full h-full" />
+                                    <img src={{ asset($profile->picture) }} alt="{{ $profile->name }}" width="166"
+                                        height="166" class="object-contain object-center w-full h-full" />
                                 @else
-                                    <img src={{ asset('/avatar.jpg') }} width="166" height="166"
-                                        class="object-contain object-center w-full h-full" />
+                                    <img src={{ asset('/avatar.jpg') }} alt="Photo de profile vide" width="166"
+                                        height="166" class="object-contain object-center w-full h-full" />
                                 @endif
                             </div>
                             <p>{{ $profile->name }}</p>
@@ -60,14 +60,6 @@
             </div>
         @endif
         {{-- Post gallery --}}
-        <div class="grid w-full grid-cols-3 gap-[2px] px-1">
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-        </div>
+        <x-posts-gallery :posts="$user->posts"/>
     </x-container>
 </x-app-layout>

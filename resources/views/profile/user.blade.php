@@ -44,14 +44,6 @@
             </div>
         </div>
         {{-- Post gallery --}}
-        <div class="grid w-full grid-cols-3 gap-[2px] px-1">
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-        </div>
+        <x-posts-gallery :posts="$user->posts"/>
     </x-container>
 </x-app-layout>
