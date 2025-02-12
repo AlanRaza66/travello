@@ -35,11 +35,10 @@ class PostController extends Controller
         return Redirect::route('dashboard')->with('success', 'La publication a bien été effectuée');
     }
 
-    public function show(User $user, Post $post, Request $request): View
+    public function show(User $user, Post $post): View
     {
-        $isLiked = $request->user()->liked($post);
         $likes = $post->likes()->count();
-        return view('posts.post', ['post' => $post, 'isLiked' => $isLiked, 'likes' => $likes]);
+        return view('posts.post', ['post' => $post, 'isLiked' => $post->isLiked(), 'likes' => $likes]);
     }
 
     public function like(Post $post, Request $request, )

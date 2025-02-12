@@ -9,6 +9,15 @@
                     {{ $post->location }}
                 </p>
                 <x-heroicon-s-map-pin class="w-6 h-6" />
+                <div class="absolute flex items-center justify-start text-white bottom-4 left-4">
+                    @if ($post->isLiked())
+                        <x-heroicon-s-heart class="w-6 h-6 cursor-pointer" />
+                        <p class="ml-[2px]">{{ $post->likesTotal() }}</p>
+                    @else
+                        <x-heroicon-o-heart class="w-6 h-6 cursor-pointer" />
+                        <p class="ml-[2px]">{{ $post->likesTotal() }}</p>
+                    @endif
+                </div>
             </div>
             <img src="{{ asset($post->picture) }}" alt="{{ $post->location }}"
                 class="object-cover object-center w-full h-full aspect-square" />

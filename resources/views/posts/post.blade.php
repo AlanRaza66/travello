@@ -9,7 +9,7 @@
                 <div class="flex items-center justify-start w-full border-gray-300  p-2 border-b-[1px]">
                     <x-xs-profile :profile="$post->user" />
                 </div>
-                <div class="w-full p-2  border-gray-300 border-b-[1px]">
+                <div class="w-full px-2 py-4  border-gray-300 border-b-[1px]">
                     <p class="flex font-bold">
                         <x-heroicon-s-map-pin class="w-6 h-6 text-red-500" />
                         <span>{{ $post->location }}</span>
