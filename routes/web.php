@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/{user:slug}', [ProfileController::class, 'getUser'])->name('user');
         Route::put('/follow/{user:slug}', [ProfileController::class, 'follow'])->name('follow');
         Route::put('/unfollow/{user:slug}', [ProfileController::class, 'unfollow'])->name('unfollow');
+    });
+
+    Route::prefix('/{user:slug}/p')->controller(PostController::class)->name('post.')->group(function () {
+        Route::get('/', 'index')->name('create');
+        Route::post('/', 'store')->name('store');
     });
 });
 
