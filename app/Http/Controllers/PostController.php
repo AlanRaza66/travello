@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
@@ -31,5 +32,10 @@ class PostController extends Controller
         ]);
 
         return Redirect::route('dashboard')->with('success', 'La publication a bien été effectuée');
+    }
+
+    public function show(User $user, Post $post): View
+    {
+        return view('posts.post', ['post' => $post]);
     }
 }

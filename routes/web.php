@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/{user:slug}/p')->controller(PostController::class)->name('post.')->group(function () {
         Route::get('/', 'index')->name('create');
         Route::post('/', 'store')->name('store');
+        Route::get('/{post:id}', 'show')->name('show');
     });
 });
 

@@ -18,7 +18,7 @@
                 <div class="flex items-center gap-2">
                     <h1 class="hidden text-lg font-bold lg:inline">{{ $user->name }}</h1>
                     <a href="{{ route('profile.edit') }}">
-                        <x-primary-button>Modifier le profil</x-primary-button>
+                        <x-primary-button>Modifier mon profil</x-primary-button>
                     </a>
                     <x-primary-button>Archives</x-primary-button>
                 </div>
@@ -41,19 +41,7 @@
                 <h3 class="pt-3 pb-4 font-bold">Tu pourrais les connaître</h3>
                 <div class="flex items-center justify-center w-full gap-4 pb-4">
                     @foreach ($doYouKnow as $profile)
-                        <a href="{{ route('profile.user', ['user' => $profile->slug]) }}"
-                            class="flex flex-wrap items-center justify-center gap-4">
-                            <div class="w-[55px] h-[55px] lg:h-[86px] lg:w-[86px] rounded-[50%] overflow-hidden">
-                                @if ($profile->picture !== null)
-                                    <img src={{ asset($profile->picture) }} alt="{{ $profile->name }}" width="166"
-                                        height="166" class="object-contain object-center w-full h-full" />
-                                @else
-                                    <img src={{ asset('/avatar.jpg') }} alt="Photo de profile vide" width="166"
-                                        height="166" class="object-contain object-center w-full h-full" />
-                                @endif
-                            </div>
-                            <p>{{ $profile->name }}</p>
-                        </a>
+                        <x-small-profile :profile="$profile"/>
                     @endforeach
                 </div>
                 <div class="w-3/4 h-[1px] my-2 lg:my-4 bg-gray-400"></div>
