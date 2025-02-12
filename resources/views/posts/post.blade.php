@@ -1,9 +1,19 @@
 <x-app-layout>
-    <x-container>
+    <x-container class="h-screen bg-red-500">
         <div class="flex flex-wrap items-start justify-start w-full overflow-hidden bg-white sm:rounded-lg">
-            <div class="lg:w-1/2 aspect-square">
+            <div class="relative lg:w-1/2 aspect-square">
                 <img src="{{ asset($post->picture) }}" alt="{{ $post->location }}"
                     class="object-cover object-center w-full h-full aspect-square" />
+                @if ($post->isMyPost())
+                    <form method="post" action="{{ route('post.delete', ['post' => $post]) }}"
+                        class="absolute top-4 right-4">
+                        @csrf
+                        @method('delete')
+                        <button>
+                            <x-heroicon-o-trash class="w-6 h-6 text-white" />
+                        </button>
+                    </form>
+                @endif
             </div>
             <div class="lg:w-1/2">
                 <div class="flex items-center justify-start w-full border-gray-300  p-2 border-b-[1px]">

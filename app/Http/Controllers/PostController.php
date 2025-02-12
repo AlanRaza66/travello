@@ -53,4 +53,17 @@ class PostController extends Controller
 
         return back()->with('success', 'Tu n\'aimes plus cette publication.');
     }
+
+    public function delete(Post $post)
+    {
+        if ($post->isMyPost()) {
+            $filePath = public_path($post->picture);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+                $post->delete();
+                return Redirect::route('profile.index')->with('success', 'La publication a bien été supprimée');
+            }
+        }
+
+    }
 }

@@ -29,4 +29,8 @@ class Post extends Model
     {
         return $this->likes()->where("post_id", $this->id)->where('user_id', Auth::user()->id)->exists();
     }
+    public function isMyPost()
+    {
+        return Auth::user()->id == $this->user_id;
+    }
 }

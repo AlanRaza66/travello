@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-container>
         {{-- Upper part of profile --}}
-        <div class="flex flex-col justify-start gap-6 mx-4 lg:flex-row lg:items-center lg:justify-center">
+        <div class="flex flex-col justify-start gap-6 mx-4 mt-4 lg:flex-row lg:items-center lg:justify-center lg:mt-0">
             <div class="flex flex-wrap items-center justify-start gap-2">
                 <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] overflow-hidden">
                     @if ($user->picture !== null)
@@ -36,7 +36,7 @@
         </div>
 
         @if (count($doYouKnow) > 0)
-            <div class="flex flex-col items-center w-full px-4">
+            <div class="flex-col items-center hidden w-full px-4 lg:flex">
                 <div class="w-3/4 h-[1px] my-2 lg:my-4 bg-gray-400"></div>
                 <h3 class="pt-3 pb-4 font-bold">Tu pourrais les connaître</h3>
                 <div class="flex items-center justify-center w-full gap-4 pb-4">

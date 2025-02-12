@@ -5,16 +5,18 @@
             class="hoverable aspect-[1/1] col-span-1 overflow-hidden top-0 left-0 relative cursor-pointer">
             <div
                 class="location absolute top-0 left-0 opacity-0  w-full h-full bg-black bg-opacity-30 duration-[500ms] backdrop-blur-sm flex flex-col items-center justify-center text-white">
-                <p class="text-sm">
-                    {{ $post->location }}
-                </p>
-                <x-heroicon-s-map-pin class="w-6 h-6" />
+                <div class="flex-col items-center justify-center hidden lg:flex">
+                    <p class="text-sm">
+                        {{ $post->location }}
+                    </p>
+                    <x-heroicon-s-map-pin class="w-6 h-6" />
+                </div>
                 <div class="absolute flex items-center justify-start text-white bottom-4 left-4">
                     @if ($post->isLiked())
-                        <x-heroicon-s-heart class="w-6 h-6 cursor-pointer" />
+                        <x-heroicon-s-heart class="w-3 h-3 cursor-pointer lg:w-6 lg:h-6" />
                         <p class="ml-[2px]">{{ $post->likesTotal() }}</p>
                     @else
-                        <x-heroicon-o-heart class="w-6 h-6 cursor-pointer" />
+                        <x-heroicon-o-heart class="w-3 h-3 cursor-pointer lg:w-6 lg:h-6" />
                         <p class="ml-[2px]">{{ $post->likesTotal() }}</p>
                     @endif
                 </div>

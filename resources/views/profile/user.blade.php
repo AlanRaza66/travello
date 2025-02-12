@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-container>
         {{-- Upper part of profile --}}
-        <div class="flex flex-col justify-start gap-6 mx-4 lg:flex-row lg:items-center lg:justify-center">
+        <div class="flex flex-col justify-start gap-6 mx-4 mt-4 lg:flex-row lg:items-center lg:justify-center lg:mt-0">
             <div class="flex flex-wrap items-center justify-start gap-2">
                 <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] overflow-hidden">
                     @if ($user->picture !== null)

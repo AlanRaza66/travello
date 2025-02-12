@@ -3,7 +3,7 @@
 @endphp
 
 {{-- Upper navbar for mobile --}}
-<nav class="fixed flex items-center justify-start w-full md:hidden h-[50px] bg-sky-500">
+<nav class="fixed flex items-center justify-start w-full md:hidden h-[50px] bg-sky-500 z-50" >
     <a class="flex items-center justify-start w-full gap-4 px-3 py-6" href="{{ route('dashboard') }}">
         <x-heroicon-s-map-pin class="w-6 h-6 text-white" />
         <span class="font-bold text-white uppercase">Travello</span>
@@ -43,7 +43,7 @@
             <p class="hidden lg:inline">{{ __('Créer') }}</p>
         @endif
     </x-nav-link>
-    <form method="POST" action="{{ route('logout') }}" class="w-full">
+    <form method="POST" action="{{ route('logout') }}" class="lg:w-full">
         @csrf
 
         <x-nav-link :href="route('logout')"
