@@ -79,4 +79,14 @@ class PostController extends Controller
 
         return back()->with('success', 'Tu a commmenté cette publication.');
     }
+
+    public function deleteComment(Comment $comment)
+    {
+        if ($comment->isMyComment() || $comment->post->isMyPost()) {
+            Comment::find($comment->id)->delete();
+            return back()->with('success', 'Tu a supprimé ton commentaire.');
+        } else {
+            return back()->with('error', 'Tu n\'a pas le droit de supprimer ce commentaire.');
+        }
+    }
 }

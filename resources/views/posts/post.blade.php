@@ -57,15 +57,31 @@
                 @if (count($post->comments) > 0)
                     <div class="w-full px-2  border-gray-300 border-b-[1px] lg:max-h-[250px] overflow-auto">
                         @foreach ($post->comments as $comment)
-                            <div class="flex items-start w-full gap-2 py-2">
+                            <div class="flex items-start w-full gap-2 pt-2">
                                 <x-xs-profile :profile="$comment->user" :hide="true" />
                                 <div>
                                     <h2 class="text-sm font-bold">{{ $comment->user->name }}</h2>
                                     <p class="whitespace-pre-wrap">{{ $comment->comment }}</p>
                                 </div>
                             </div>
-                            <div class="w-full">
+                            <div class="w-full flex items-center justify-between">
+                                <div class="flex gap-2">
+                                    <button type="submit" class="flex items-center justify-start">
+                                        <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
+                                        <small class="ml-[2px] text-gray-400">{{ $likes }}</small>
+                                    </button>
+                                    @if ($comment->isMyComment() || $post->isMyPost())
+                                        <form method="POST" action="{{ route("post.uncomment", ['comment' => $comment])}}">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="flex items-center justify-start">
+                                                <x-heroicon-o-trash class="w-4 h-4 text-gray-400 cursor-pointer" />
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                                 <small class="text-gray-400">{{ $comment->created_at }}</small>
+
                             </div>
                         @endforeach
                     </div>
