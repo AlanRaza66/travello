@@ -89,4 +89,16 @@ class PostController extends Controller
             return back()->with('error', 'Tu n\'a pas le droit de supprimer ce commentaire.');
         }
     }
+
+    public function likeComment(Comment $comment, Request $request) {
+        $request->user()->likesComment()->attach($comment->id);
+
+        return back()->with('success', 'Tu as aimé ce commentaire.');
+    }
+
+    public function unlikeComment(Comment $comment, Request $request) {
+        $request->user()->likesComment()->detach($comment->id);
+
+        return back()->with('success', 'Tu n\'aime plus ce commentaire.');
+    }
 }

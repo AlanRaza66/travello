@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/p/{post:id}', [PostController::class, "delete"])->name('post.delete');
     Route::post('/p/{post:id}', [PostController::class, "comment"])->name('post.comment');
     Route::delete('/comment/{comment:id}', [PostController::class, "deleteComment"])->name('post.uncomment');
+    Route::post('/comment/{comment:id}/like', [PostController::class, "likeComment"])->name('post.comment.like');
+    Route::post('/comment/{comment:id}/unlike', [PostController::class, "unlikeComment"])->name('post.comment.unlike');
 });
 
 

@@ -19,7 +19,23 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function isMyComment() {
+    public function isMyComment()
+    {
         return Auth::user()->id === $this->user_id;
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, "comment_user", "comment_id", "user_id");
+    }
+
+    public function likesTotal()
+    {
+        return $this->likes()->count();
+    }
+
+    public function isLiked()
+    {
+        return $this->likes()->where("comment_id", $this->id)->where('user_id', Auth::user()->id)->exists();
     }
 }

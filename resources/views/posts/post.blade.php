@@ -25,7 +25,7 @@
                         <span>{{ $post->location }}</span>
                     </p>
                     <div class="flex mt-1">
-                        <x-heroicon-s-information-circle class="w-6 h-6 text-teal-500" />
+                        <x-heroicon-s-information-circle class="w-6 h-6" />
                         <p class="whitespace-pre-wrap">{{ $post->description }}</p>
                     </div>
                 </div>
@@ -66,12 +66,31 @@
                             </div>
                             <div class="w-full flex items-center justify-between">
                                 <div class="flex gap-2">
-                                    <button type="submit" class="flex items-center justify-start">
-                                        <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
-                                        <small class="ml-[2px] text-gray-400">{{ $likes }}</small>
-                                    </button>
+                                    @if ($comment->isLiked())
+                                        <form method="post"
+                                            action="{{ route('post.comment.unlike', ['comment' => $comment]) }}">
+                                            @csrf
+                                            <button type="submit" class="flex items-center justify-start">
+                                                <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
+                                                <small
+                                                    class="ml-[2px] text-gray-400">{{ $comment->likesTotal() }}</small>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form method="post"
+                                            action="{{ route('post.comment.like', ['comment' => $comment]) }}">
+                                            @csrf
+                                            <button type="submit" class="flex items-center justify-start">
+                                                <x-heroicon-o-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
+                                                <small
+                                                    class="ml-[2px] text-gray-400">{{ $comment->likesTotal() }}</small>
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     @if ($comment->isMyComment() || $post->isMyPost())
-                                        <form method="POST" action="{{ route("post.uncomment", ['comment' => $comment])}}">
+                                        <form method="POST"
+                                            action="{{ route('post.uncomment', ['comment' => $comment]) }}">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="flex items-center justify-start">
