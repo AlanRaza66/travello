@@ -45,15 +45,22 @@ class PostController extends Controller
 
     public function like(Post $post, Request $request, )
     {
-        $request->user()->likes()->attach($post->id);
+        $user = $request->user();
+        $liked = $user->likes()->where('post_id', $post->id)->exists();
 
-        return back()->with('success', 'Tu as aimé cette publication.');
-    }
-    public function unlike(Post $post, Request $request, )
-    {
-        $request->user()->likes()->detach($post->id);
+        if ($liked) {
+            $user->likes()->detach($post->id);
+            $action = "unlike";
+        } else {
+            $user->likes()->attach($post->id);
+            $action = "like";
+        }
 
-        return back()->with('success', 'Tu n\'aimes plus cette publication.');
+        return Response()->json([
+            'success' => true,
+            'likesTotal' => $post->likes()->count(),
+            'action' => $action
+        ]);
     }
 
     public function delete(Post $post)
@@ -91,13 +98,15 @@ class PostController extends Controller
         }
     }
 
-    public function likeComment(Comment $comment, Request $request) {
+    public function likeComment(Comment $comment, Request $request)
+    {
         $request->user()->likesComment()->attach($comment->id);
 
         return back()->with('success', 'Tu as aimé ce commentaire.');
     }
 
-    public function unlikeComment(Comment $comment, Request $request) {
+    public function unlikeComment(Comment $comment, Request $request)
+    {
         $request->user()->likesComment()->detach($comment->id);
 
         return back()->with('success', 'Tu n\'aime plus ce commentaire.');

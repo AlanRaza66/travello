@@ -32,22 +32,17 @@
                     </div>
                     <div class="w-full gap-4 p-2  border-gray-300 border-b-[1px] bg-white">
                         <div class="flex gap-2">
-                            @if ($isLiked)
-                                <form method="post" action="{{ route('post.unlike', ['post' => $post]) }}">
-                                    @csrf <button type="submit" class="flex items-center justify-start">
+
+                            <form method="post" id="like-form" action="{{ route('post.like', ['post' => $post]) }}">
+                                @csrf <button type="submit" class="flex items-center justify-start like-button">
+                                    @if ($isLiked)
                                         <x-heroicon-s-heart class="w-6 h-6 text-black cursor-pointer" />
-                                        <p class="ml-[2px]">{{ $likes }}</p>
-                                    </button>
-                                </form>
-                            @else
-                                <form method="post" action="{{ route('post.like', ['post' => $post]) }}">
-                                    @csrf
-                                    <button type="submit" class="flex items-center justify-start">
+                                    @else
                                         <x-heroicon-o-heart class="w-6 h-6 text-black cursor-pointer" />
-                                        <p class="ml-[2px]">{{ $likes }}</p>
-                                    </button>
-                                </form>
-                            @endif
+                                    @endif
+                                    <p class="ml-[2px]" id="post-likes">{{ $likes }}</p>
+                                </button>
+                            </form>
 
                             <div class="flex items-center justify-start">
                                 <x-heroicon-o-chat-bubble-left class="w-6 h-6 text-black cursor-pointer" />
@@ -74,5 +69,45 @@
                 </div>
             </div>
         </div>
+
     </x-container>
 </x-app-layout>
+<script>
+    document.getElementById("like-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const url = this.action;
+        const method = this.method;
+        const data = new FormData(this);
+
+        fetch(url, {
+                method: method,
+                body: data,
+                headers: {
+                    'X-CSRF-TOKEN': data.get('_token')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Mettre à jour le nombre de likes
+                    document.getElementById("post-likes").innerText = data.likesTotal;
+
+                    // Mettre à jour l'icône
+                    const likeButton = this.querySelector(".like-button");
+                    if (data.action === 'like') {
+                        likeButton.innerHTML = `
+                        <x-heroicon-s-heart class="w-6 h-6 text-black cursor-pointer" />
+                        <p class="ml-[2px]" id="post-likes">${data.likesTotal}</p>
+                    `;
+                    } else {
+                        likeButton.innerHTML = `
+                        <x-heroicon-o-heart class="w-6 h-6 text-black cursor-pointer" />
+                        <p class="ml-[2px]" id="post-likes">${data.likesTotal}</p>
+                    `;
+                    }
+                }
+            })
+            .catch(error => console.error("Erreur :", error))
+    })
+</script>
