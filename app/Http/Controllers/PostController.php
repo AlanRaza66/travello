@@ -75,6 +75,7 @@ class PostController extends Controller
             "comment" => $request->input("comment"),
             "user_id" => Auth::user()->id,
             "post_id" => $post->id,
+            "comment_id" => $request->input("comment_id")
         ]);
 
         return back()->with('success', 'Tu a commmenté cette publication.');

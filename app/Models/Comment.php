@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class Comment extends Model
 {
     //
-    protected $fillable = ["comment", "user_id", "post_id"];
+    protected $fillable = ["comment", "user_id", "post_id", "comment_id"];
 
     public function user()
     {
@@ -37,5 +37,19 @@ class Comment extends Model
     public function isLiked()
     {
         return $this->likes()->where("comment_id", $this->id)->where('user_id', Auth::user()->id)->exists();
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function countAnswers() {
+        return $this->answers()->count();
     }
 }
