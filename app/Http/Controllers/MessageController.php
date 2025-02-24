@@ -14,4 +14,10 @@ class MessageController extends Controller
         $users = User::all()->where('id', '!=', Auth::user()->id);
         return view('messages.index', ['users' => $users]);
     }
-}
+
+    public function show(User $user)
+    {
+        $users = User::all()->where('id', '!=', Auth::user()->id);
+        return view('messages.show', ['user'=> $user, 'users' => $users]);
+    }
+ }
