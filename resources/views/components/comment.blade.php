@@ -8,23 +8,24 @@
 </div>
 <div class="flex items-center justify-between w-full">
     <div class="flex gap-3">
-        @if ($comment->isLiked())
-            <form method="post" action="{{ route('post.comment.unlike', ['comment' => $comment]) }}">
-                @csrf
-                <button type="submit" class="flex items-center justify-start">
+        {{-- TODO transform comment,like and delete comment to AJAX request --}}
+
+        <form method="post" action="{{ route('post.comment.like', ['comment' => $comment]) }}" class="comment-like"
+            data-id="{{ $comment->id }}">
+            @csrf
+
+            <button type="submit" class="flex items-center justify-start comment-like-button">
+                @if ($comment->isLiked())
                     <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
-                    <small class="ml-[2px] text-gray-400">{{ $comment->likesTotal() }}</small>
-                </button>
-            </form>
-        @else
-            <form method="post" action="{{ route('post.comment.like', ['comment' => $comment]) }}">
-                @csrf
-                <button type="submit" class="flex items-center justify-start">
+                @else
                     <x-heroicon-o-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
-                    <small class="ml-[2px] text-gray-400">{{ $comment->likesTotal() }}</small>
-                </button>
-            </form>
-        @endif
+                @endif
+
+                <small class="ml-[2px] text-gray-400"
+                    id="{{ 'comment-likes-' . $comment->id }}">{{ $comment->likesTotal() }}</small>
+
+            </button>
+        </form>
 
         <div class="flex items-center justify-start cursor-pointer toggle" data-id="{{ $comment->id }}">
             <x-heroicon-o-chat-bubble-left-right class="w-4 h-4 text-gray-400" />
@@ -57,23 +58,20 @@
                 </div>
                 <div class="flex items-center justify-between w-full">
                     <div class="flex gap-3">
-                        @if ($answer->isLiked())
-                            <form method="post" action="{{ route('post.comment.unlike', ['comment' => $answer]) }}">
-                                @csrf
-                                <button type="submit" class="flex items-center justify-start">
+
+                        <form method="post" action="{{ route('post.comment.like', ['comment' => $answer]) }}"
+                            class="comment-like" data-id="{{ $answer->id }}">
+                            @csrf
+                            <button type="submit" class="flex items-center justify-start comment-like-button">
+                                @if ($answer->isLiked())
                                     <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
-                                    <small class="ml-[2px] text-gray-400">{{ $answer->likesTotal() }}</small>
-                                </button>
-                            </form>
-                        @else
-                            <form method="post" action="{{ route('post.comment.like', ['comment' => $answer]) }}">
-                                @csrf
-                                <button type="submit" class="flex items-center justify-start">
+                                @else
                                     <x-heroicon-o-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
-                                    <small class="ml-[2px] text-gray-400">{{ $answer->likesTotal() }}</small>
-                                </button>
-                            </form>
-                        @endif
+                                @endif
+                                <small class="ml-[2px] text-gray-400"
+                                    id="{{ 'comment-likes-' . $answer->id }}">{{ $answer->likesTotal() }}</small>
+                            </button>
+                        </form>
 
                         @if ($answer->isMyComment() || $post->isMyPost())
                             <form method="POST" action="{{ route('post.uncomment', ['comment' => $answer]) }}">
@@ -101,15 +99,10 @@
     </form>
 </div>
 <script>
-    // Supprimer tous les écouteurs existants
-    document.querySelectorAll(".toggle").forEach(toggleBtn => {
-        toggleBtn.replaceWith(toggleBtn.cloneNode(true)); // Remplace le bouton par une copie "vierge"
-    });
-
-    // Ajouter les écouteurs à nouveau
-    document.querySelectorAll(".toggle").forEach(toggleBtn => {
-        toggleBtn.addEventListener("click", function() {
-            const commentId = this.getAttribute("data-id");
+    document.addEventListener("click", function(event) {
+        if (event.target.closest(".toggle")) {
+            const toggleBtn = event.target.closest(".toggle");
+            const commentId = toggleBtn.getAttribute("data-id");
             const answerInput = document.getElementById(commentId);
 
             if (answerInput.classList.contains("hidden")) {
@@ -119,6 +112,52 @@
                 answerInput.classList.add("hidden");
                 answerInput.classList.remove("block");
             }
-        });
+        }
     });
+
+    //AJAX pour les liker les commentaires
+    // TODO: Optimize this
+    document.querySelectorAll(".comment-like").forEach(form => {
+        form.replaceWith(form.cloneNode(true));
+    });
+
+    document.querySelectorAll(".comment-like").forEach((form) => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const url = this.action;
+            const method = this.method;
+            const data = new FormData(this);
+            const id = this.getAttribute("data-id")
+            fetch(url, {
+                    method: method,
+                    body: data,
+                    headers: {
+                        'X-CSRF-TOKEN': data.get('_token')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Mettre à jour le nombre de likes
+                        document.getElementById(`comment-likes-${id}`).innerText = data.likesTotal;
+
+                        // Mettre à jour l'icône
+                        const likeButton = this.querySelector(".comment-like-button");
+                        if (data.action === 'like') {
+                            likeButton.innerHTML = `
+                        <x-heroicon-s-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
+                        <small class="ml-[2px] text-gray-400" id="comment-likes-${id}">${data.likesTotal}</small>
+                    `;
+                        } else {
+                            likeButton.innerHTML = `
+                        <x-heroicon-o-heart class="w-4 h-4 text-gray-400 cursor-pointer" />
+                        <small class="ml-[2px] text-gray-400" id="comment-likes-${id}">${data.likesTotal}</small>
+                    `;
+                        }
+                    }
+                })
+                .catch(error => console.error("Erreur :", error))
+        })
+    })
 </script>

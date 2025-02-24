@@ -100,15 +100,20 @@ class PostController extends Controller
 
     public function likeComment(Comment $comment, Request $request)
     {
-        $request->user()->likesComment()->attach($comment->id);
+        $liked = $comment->isLiked();
+        if ($liked) {
+            $request->user()->likesComment()->detach($comment->id);
 
-        return back()->with('success', 'Tu as aimé ce commentaire.');
-    }
+            $action = "unlike";
+        } else {
+            $request->user()->likesComment()->attach($comment->id);
+            $action = "like";
+        }
 
-    public function unlikeComment(Comment $comment, Request $request)
-    {
-        $request->user()->likesComment()->detach($comment->id);
-
-        return back()->with('success', 'Tu n\'aime plus ce commentaire.');
+        return Response()->json([
+            'success' => true,
+            'likesTotal' => $comment->likes()->count(),
+            'action' => $action
+        ]);
     }
 }
