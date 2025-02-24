@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-container>
         {{-- Upper part of profile --}}
-        <div class="flex flex-col justify-start gap-6 mx-4 lg:flex-row lg:items-center lg:justify-center">
+        <div class="flex flex-col justify-start gap-6 mx-4 mt-4 lg:flex-row lg:items-center lg:justify-center lg:mt-0">
             <div class="flex flex-wrap items-center justify-start gap-2">
                 <div class="h-[87px] w-[87px] md:h-[166px] md:w-[166px] rounded-[50%] overflow-hidden">
                     @if ($user->picture !== null)
@@ -44,14 +44,6 @@
             </div>
         </div>
         {{-- Post gallery --}}
-        <div class="grid w-full grid-cols-3 gap-[2px] px-1">
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-            <div class="bg-teal-500 aspect-[1/1] col-span-1"></div>
-        </div>
+        <x-posts-gallery :posts="$user->posts"/>
     </x-container>
 </x-app-layout>
