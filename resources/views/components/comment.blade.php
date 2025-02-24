@@ -99,10 +99,15 @@
     </form>
 </div>
 <script>
-    document.addEventListener("click", function(event) {
-        if (event.target.closest(".toggle")) {
-            const toggleBtn = event.target.closest(".toggle");
-            const commentId = toggleBtn.getAttribute("data-id");
+    // Supprimer tous les écouteurs existants
+    document.querySelectorAll(".toggle").forEach(toggleBtn => {
+        toggleBtn.replaceWith(toggleBtn.cloneNode(true)); // Remplace le bouton par une copie "vierge"
+    });
+
+    // Ajouter les écouteurs à nouveau
+    document.querySelectorAll(".toggle").forEach(toggleBtn => {
+        toggleBtn.addEventListener("click", function() {
+            const commentId = this.getAttribute("data-id");
             const answerInput = document.getElementById(commentId);
 
             if (answerInput.classList.contains("hidden")) {
@@ -112,11 +117,10 @@
                 answerInput.classList.add("hidden");
                 answerInput.classList.remove("block");
             }
-        }
+        });
     });
 
     //AJAX pour les liker les commentaires
-    // TODO: Optimize this
     document.querySelectorAll(".comment-like").forEach(form => {
         form.replaceWith(form.cloneNode(true));
     });

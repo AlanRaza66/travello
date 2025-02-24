@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::prefix('/messages')->controller(MessageController::class)->name("messages.")->group(function(){
+        Route::get('/', 'index')->name('index');
+    });
 
     Route::prefix('/profile')->controller(ProfileController::class)->name("profile.")->group(function () {
         Route::get('/', 'index')->name('index');

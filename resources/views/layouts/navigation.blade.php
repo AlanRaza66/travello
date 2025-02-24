@@ -19,10 +19,19 @@
     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
         @if (request()->routeIs('dashboard'))
             <x-heroicon-s-home class="w-6 h-6 lg:mr-3" />
-            <p class="hidden lg:inline">{{ __('Accueil') }}</p>
+            <p class="hidden lg:inline">{{ __('Actualités') }}</p>
         @else
             <x-heroicon-o-home class="w-6 h-6 lg:mr-3" />
-            <p class="hidden lg:inline">{{ __('Accueil') }}</p>
+            <p class="hidden lg:inline">{{ __('Actualités') }}</p>
+        @endif
+    </x-nav-link>
+    <x-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')">
+        @if (request()->routeIs('messages.*'))
+            <x-heroicon-s-chat-bubble-oval-left-ellipsis class="w-6 h-6 lg:mr-3" />
+            <p class="hidden lg:inline">{{ __('Messages') }}</p>
+        @else
+            <x-heroicon-o-chat-bubble-oval-left-ellipsis class="w-6 h-6 lg:mr-3" />
+            <p class="hidden lg:inline">{{ __('Messages') }}</p>
         @endif
     </x-nav-link>
     <x-nav-link :href="route('profile.index')" :active="request()->routeIs('profile.*')">
