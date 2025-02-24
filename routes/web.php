@@ -14,9 +14,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('/messages')->controller(MessageController::class)->name("messages.")->group(function(){
+    Route::prefix('/messages')->controller(MessageController::class)->name("messages.")->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/m/{user:slug}', 'show')->name('show');
+        Route::post('/m/{user:slug}', 'send')->name('send');
     });
 
     Route::prefix('/profile')->controller(ProfileController::class)->name("profile.")->group(function () {
