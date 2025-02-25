@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\messageEvent;
+use App\Events\testingEvent;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Client\Response;
@@ -19,8 +21,14 @@ class MessageController extends Controller
 
     public function show(User $user)
     {
-        $users = User::all()->where('id', '!=', Auth::user()->id);
-        return view('messages.show', ['user' => $user, 'users' => $users]);
+        $me = Auth::user();
+        $users = User::all()->where('id', '!=', $me->id);
+        $messages = Message::where(function ($query) use ($user, $me) {
+            $query->where('from_id', $me->id)->where('to_id', $user->id);
+        })->orWhere(function ($query) use ($user, $me) {
+            $query->where('to_id', $me->id)->where('from_id', $user->id);
+        })->orderBy('created_at', 'asc')->get();
+        return view('messages.show', ['user' => $user, 'users' => $users, 'messages' => $messages]);
     }
 
     public function send(User $user, Request $request)
@@ -43,6 +51,8 @@ class MessageController extends Controller
             "to_id" => $user->id,
             "content" => $request->content,
         ]);
+
+        event(new messageEvent($user->id, $request->content));
 
         return Response()->json(["success" => true, "content" => $request->content, "message" => "Message envoyé"], 200);
     }
