@@ -12,13 +12,20 @@ use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
-    //
+    /**
+     * Summary of index
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $users = User::all()->where('id', '!=', Auth::user()->id);
         return view('messages.index', ['users' => $users]);
     }
-
+    /**
+     * Summary of show
+     * @param \App\Models\User $user
+     * @return \Illuminate\Contracts\View\View
+     */
     public function show(User $user)
     {
         $me = Auth::user();
@@ -27,10 +34,16 @@ class MessageController extends Controller
             $query->where('from_id', $me->id)->where('to_id', $user->id);
         })->orWhere(function ($query) use ($user, $me) {
             $query->where('to_id', $me->id)->where('from_id', $user->id);
-        })->orderBy('created_at', 'asc')->get();
+        })->orderBy('created_at', 'asc')->paginate(20);
         return view('messages.show', ['user' => $user, 'users' => $users, 'messages' => $messages]);
     }
 
+    /**
+     * Summary of send
+     * @param \App\Models\User $user
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function send(User $user, Request $request)
     {
         $from = Auth::user();
@@ -52,8 +65,10 @@ class MessageController extends Controller
             "content" => $request->content,
         ]);
 
-        event(new messageEvent($user->id, $request->content));
+        $to = env('APP_URL').'/'.$user->picture;
+        $from = env('APP_URL').'/'.$from->picture;
+        event(new messageEvent($user->id, $from, $request->content));
 
-        return Response()->json(["success" => true, "content" => $request->content, "message" => "Message envoyé"], 200);
+        return Response()->json(["success" => true, "content" => $request->content, "message" => "Message envoyé", "from" => $from, "to" => $to], 200);
     }
 }

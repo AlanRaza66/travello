@@ -14,23 +14,26 @@ class messageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user_id;
+    public $user;
     public $message;
+    public $to;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($user_id, $message)
+    public function __construct($user, $to, $message)
     {
         //
-        $this->user_id = $user_id;
+        $this->user = $user;
         $this->message = $message;
+        $this->to = $to;
     }
 
     public function broadcastWith()
     {
         return [
-            "message" => $this->message
+            "message" => $this->message,
+            "to" => $this->to
         ];
     }
 
@@ -42,7 +45,7 @@ class messageEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('message.' . $this->user_id),
+            new Channel('message.' . $this->user),
         ];
     }
 }
